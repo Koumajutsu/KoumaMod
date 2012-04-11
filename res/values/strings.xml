@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Koumamod</string>
+    <string name="CheckText">Disable Internal /data</string>
+    <string name="modmode_header">Mounting Mode</string>
+    <string name="modmode_default">None (Default)</string>
+    <string name="modmode_data">Data</string>
+    <string name="modmode_ssm">SSM</string>
+    <string name="modtext_header">on koumamod</string>
+    <string name="modtext_internal">	mount ext4 /dev/stl13 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc</string>
+	<string name="modtext_data">	mount ext4 /dev/block/mmcblk0p2 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc</string>
+    <string name="modtext_coreblock1">	mkdir /data/dalvik-cache 0771 system system
+	chown system system /data/dalvik-cache
+	chmod 0771 /data/dalvik-cache
+	mkdir /data/app 0771 system system</string>
+	<string name="modtext_ssm">	mount ext4 /dev/block/mmcblk0p2 /data/app rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc
+	mount ext4 /dev/block/mmcblk0p3 /data/dalvik-cache rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc</string>
+	<string name="modtext_coreblock2">	chown system system /data
+	chmod 0771 /data
+	trigger post-fs</string>
+</resources>
