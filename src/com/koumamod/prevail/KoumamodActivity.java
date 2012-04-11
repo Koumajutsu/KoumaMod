@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import java.lang.Runtime;
 
 //import android.os.storage.*;
 
@@ -16,10 +17,14 @@ public class KoumamodActivity extends Activity {
 //	  private RadioButton radioModButton;
 	  private CheckBox checkDataMode;
     /** Called when the activity is first created. */
+	  Process p;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+    try {
+        p = Runtime.getRuntime().exec("su");
+    } catch (java.io.IOException e){}
         checkDataMode();
     }
     public void checkDataMode(){
@@ -37,6 +42,7 @@ public class KoumamodActivity extends Activity {
 				case R.id.radio0:
 				case R.id.radio2:
 					checkDataMode.setClickable(false);
+					checkDataMode.setChecked(false);
 					break;
 				}
 			}
