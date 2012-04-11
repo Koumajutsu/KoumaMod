@@ -1,10 +1,10 @@
 package com.koumamod.prevail;
 
-//import android.Radio.Butt.tut.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
+//import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 
 public class KoumamodActivity extends Activity {
 	  private RadioGroup radioModGroup;
-	  private RadioButton radioModButton;
+//	  private RadioButton radioModButton;
 	  private CheckBox checkDataMode;
     /** Called when the activity is first created. */
     @Override
@@ -24,17 +24,20 @@ public class KoumamodActivity extends Activity {
     }
     public void checkDataMode(){
 		radioModGroup = (RadioGroup) findViewById(R.id.radioGroup1);
-		radioModGroup.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+		radioModGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			//@Override
+			public void onCheckedChanged(RadioGroup myGroup, int mycheckid) {
 				int selectedId = radioModGroup.getCheckedRadioButtonId();
-				radioModButton = (RadioButton) findViewById(selectedId);
-				CharSequence SelMode = radioModButton.getText();
+//				radioModButton = (RadioButton) findViewById(selectedId);
 				checkDataMode = (CheckBox) findViewById(R.id.checkBox1);
-				if(SelMode=="Data") {
+				switch (selectedId) {
+				case R.id.radio1:
 					checkDataMode.setClickable(true);
-				}
-				else {
+					break;
+				case R.id.radio0:
+				case R.id.radio2:
 					checkDataMode.setClickable(false);
+					break;
 				}
 			}
 		});
