@@ -68,11 +68,13 @@ public class KoumamodActivity extends Activity {
 				switch (selectedId) {
 				case R.id.radio1:
 					checkDataMode.setClickable(true);
+					checkDataMode.setVisibility(android.view.View.VISIBLE);
 					break;
 				case R.id.radio0:
 				case R.id.radio2:
 					checkDataMode.setClickable(false);
 					checkDataMode.setChecked(false);
+					checkDataMode.setVisibility(android.view.View.GONE);
 					break;
 				}
 				savesettings(checkDataMode, selectedId);
@@ -87,7 +89,3 @@ public class KoumamodActivity extends Activity {
 		});
     }
 }
-
-	
- 
-
