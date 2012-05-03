@@ -4,6 +4,7 @@
     <string name="srvce_name">KoumaSwap</string>
     <string name="CheckText">Disable Internal /data</string>
     <string name="modmode_header">Mounting Mode</string>
+    <string name="swapmode_header">Swap Settings</string>
     <string name="modmode_default">None (Default)</string>
     <string name="modmode_data">Data</string>
     <string name="modmode_ssm">SSM</string>
@@ -13,4 +14,9 @@
     <string name="modtext_coreblock1">mkdir /data/dalvik-cache 0771 system system \n chown system system /data/dalvik-cache \n chmod 0771 /data/dalvik-cache \n mkdir /data/app 0771 system system \n</string>
 	<string name="modtext_ssm">	mount ext4 /dev/block/mmcblk0p2 /data/app rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n mount ext4 /dev/block/mmcblk0p3 /data/dalvik-cache rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n</string>
 	<string name="modtext_coreblock2">	chown system system /data \n chmod 0771 /data \n trigger post-fs \n</string>
+	<string name="swappiness_text">Swappiness</string>
+	<string name="savebutton_text">Save Settings</string>
+	<string name="swappathheader">Swap Path</string>
+	<string name="priorityheader">Priority</string>
+	<string name="pathhint">Long Press to Browse</string>
 </resources>

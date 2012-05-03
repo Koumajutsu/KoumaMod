@@ -17,15 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity
-		    android:name=".KoumaSwap"
-		    android:label="@string/srvce_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<action android:name="com.koumamod.prevail.KoumaSwap" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
+		<service android:name=".KoumaSwap"
+		    	android:process=":remote" />
 	<receiver
 	    android:name=".StartMyServiceAtBootReceiver"
 	    android:enabled="true"
@@ -35,7 +28,8 @@
 	        <action android:name="android.intent.action.BOOT_COMPLETED" />
 	    </intent-filter>
 	</receiver>
-		
-	</application>
+	<activity android:name=".KoumamodMenu" />	
+	<activity android:name=".KoumaswapMenu" />	
+		</application>
     
 </manifest>

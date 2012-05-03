@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <CheckedTextView
+        android:id="@+id/checkedTextView1"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:text="@string/swapmode_header" />
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/Textview1"
+                    android:layout_width="246dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" 
+                    android:layout_height="wrap_content"
+                    android:text="@string/swappathheader" />
+
+	            <TextView
+	                android:id="@+id/Textview2"
+	                android:layout_width="61dp"
+	                android:textAppearance="?android:attr/textAppearanceMedium" 
+	                android:layout_height="wrap_content"
+	                android:text="@string/priorityheader" />
+
+             </LinearLayout>
+
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="row1" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="rowlayout1" >
+
+                <EditText
+                    android:id="@+id/pathText1"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/pathhint"
+                    android:inputType="textUri"
+                    android:tag="SwapPath0" />
+
+
+	            <EditText
+	                android:id="@+id/priorityText1"
+	                android:layout_width="61dp"
+	                android:layout_height="wrap_content"
+	                android:inputType="number"
+	                android:tag="SwapPri0" />
+
+             </LinearLayout>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/swappiness_text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/seekPosHumanReadable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:max="100" />
+
+    <Button
+        android:id="@+id/SaveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/savebutton_text" />
+
+    
+</LinearLayout>
