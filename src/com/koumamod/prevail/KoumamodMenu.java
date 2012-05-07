@@ -1,5 +1,7 @@
 package com.koumamod.prevail;
 
+import java.io.*;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,12 +9,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
-import java.io.*;
-import com.stericson.RootTools.RootTools;
 import android.widget.Toast;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+
+import com.stericson.RootTools.RootTools;
 
 public class KoumamodMenu extends Activity {
 	  private RadioGroup radioModGroup;
@@ -32,7 +32,7 @@ public class KoumamodMenu extends Activity {
         checkDataMode.setClickable(settings.getBoolean("InternEna", false));
 		checkDataMode.setVisibility(checkDataMode.isClickable()? android.view.View.VISIBLE : android.view.View.GONE);
         checkDataMode.setChecked(settings.getBoolean("MountIntern", false));
-        radioModGroup.check(settings.getInt("ModMode",R.id.radio0));
+        radioModGroup.check(settings.getInt("ModMode", android.os.Build.ID.contains("Chicken Tits") ? R.id.radio2 :R.id.radio0 ));
         myDataMode();
     }
     public void savesettings(CheckBox c, int selId) {
@@ -61,9 +61,6 @@ public class KoumamodMenu extends Activity {
         	}
         } catch (java.io.IOException e){}
         RootTools.remount("/system/", "ro");
-        Log.i("classname",com.koumamod.prevail.KoumaSwap.class.getName());
-        Intent serviceIntent = new Intent(this, KoumaSwap.class);//"com.koumamod.prevail.KoumaSwap");
-		startService(serviceIntent);
         Toast.makeText(KoumamodMenu.this, "Settings saved.\nReboot for changes to take effect.", Toast.LENGTH_LONG).show();
     }
     public void myDataMode(){

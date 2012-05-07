@@ -1,11 +1,11 @@
 package com.koumamod.prevail;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -14,10 +14,12 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.EditText;
-import android.widget.TableRow.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TableLayout;
 import android.widget.LinearLayout;
+
+import com.stericson.RootTools.Mount;
+import com.stericson.RootTools.RootTools;
 
 public class KoumaswapMenu extends Activity {
 	public SeekBar swappinessbar;
@@ -30,8 +32,8 @@ public class KoumaswapMenu extends Activity {
 	public TableLayout pathtable;
 	public static final String PREFS_NAME = "KoumaModSettings";
 	public String paths;
-	public String PathGroups[];
-	public String pathItems[][];
+	public String[] PathGroups;
+	public String[][] pathItems;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -79,16 +81,18 @@ public class KoumaswapMenu extends Activity {
 				   			TextView checktext = (TextView) findViewById(checklay.getChildAt(y).getId());
 				   			addflag = y == 0 ? !(checktext.getText().toString().isEmpty()) : addflag;
 				   			paths = addflag ? y == 0 ? paths + checktext.getText().toString() : paths + "," + checktext.getText().toString() : paths;
-						   	Log.i("com.koumamod.prevail",paths);
 				   		}
 				   	}
-				   	paths = paths == "" ? paths : paths + "\t";
-				   	Log.i("com.koumamod.prevail",paths);
+				   	paths = paths == "" ? paths : addflag ? paths + "\t" : paths;
 			   	};
-			   	Log.i("com.koumamod.prevail",paths);
 			   	editor.putString("swaplist", paths);
+			   	editor.putString("dependancies", calculateDeps(pathItems));
 			   	editor.commit();
+		        Intent serviceIntent = new Intent(KoumaswapMenu.this, KoumaSwap.class);//"com.koumamod.prevail.KoumaSwap");
+				startService(serviceIntent);
 		        Toast.makeText(KoumaswapMenu.this, "Settings saved.", Toast.LENGTH_LONG).show();
+		        pathtable.removeViews(2, pathtable.getChildCount()-2);
+		        LoadPaths();
 			}
 		});
 		pathtext = (EditText) findViewById(R.id.pathText1);
@@ -99,26 +103,26 @@ public class KoumaswapMenu extends Activity {
 		swappinessInd =(TextView) findViewById(R.id.seekPosHumanReadable);
 		swappinessInd.setText(settings.getString("Swappiness","60"));
 		swappinessbar.setProgress(Integer.parseInt(settings.getString("Swappiness","60")));
-		String loadpaths = settings.getString("swaplist", "/dev/stl13,100\t"); ///dev/stl13,100\t
-//		Log.i("kouma.viewtest",loadpaths);
+		String loadpaths = settings.getString("swaplist", "/dev/stl13,100\t");
 		PathGroups = loadpaths.split("\t");
 		pathItems=new String[PathGroups.length][];
 		for(int i=0;i<PathGroups.length;i++){
-			Log.i("kouma.viewtest",PathGroups[i]);
 			pathItems[i]=PathGroups[i].split(",");
 			for(int t=0;t<pathItems[i].length;t++){
-				Log.i("kouma.viewtest",pathItems[i][t]);
 			}
 			if(i>0){
 				addRow(i);
 			}
 			if(pathItems[i].length>0){
 				pathtext.setText(pathItems[i][0]);
-				prioritytest.setText(pathItems[i][1]);
+				if(pathItems[i].length>1){
+					prioritytest.setText(pathItems[i][1]);
+				}
 			}
-			Log.i("kouma.viewtest",pathItems[i][0]+" "+pathItems[i][1]);
 		}
-		addRow(PathGroups.length);
+		if(PathGroups.length<4){
+			addRow(PathGroups.length);
+		}
 	}
 	private void addRow(int index){
 		TableRow tr =new TableRow(this);
@@ -144,42 +148,42 @@ public class KoumaswapMenu extends Activity {
 		addTextChanger(pathtext);
 		prioritytest=tv2;
 	}
+	private String calculateDeps(String[][] Items){
+		String Deps = "";
+		for(int i = 0;i<Items.length;i++){
+			ArrayList<Mount> curMounts = new ArrayList<Mount>();
+			try{
+				curMounts = RootTools.getMounts();
+			}catch (Exception e){
+			}
+			if (!curMounts.isEmpty()){
+				String M = "";
+				for (int x=0;x<curMounts.size();x++){
+					M = Items[i][1].contains(curMounts.get(x).getMountPoint().getAbsolutePath()) ?
+							M.length()<curMounts.get(x).getMountPoint().getAbsolutePath().length() ?
+									curMounts.get(x).getMountPoint().getAbsolutePath() : M : M;					
+				}
+				M = M.isEmpty() ? "<none>" : M;
+				Deps = Deps.isEmpty() ? M : Deps + "," + M;
+			}
+		}
+		return Deps;
+	}
 	private void addTextChanger(EditText h){
-		h.addTextChangedListener(new TextWatcher(){
-			@Override
-			public void afterTextChanged(Editable s) {
-				Log.i("com.koumamod.prevail",s.toString());
-				if(s.toString() != ""){
-					//pathtable.getChildCount();
-					
-					//add row if none are empty
-				}
-				else {
-					//remove all but 1 empty row
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1,
-					int arg2, int arg3) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
 		h.setLongClickable(true);
 		h.setOnLongClickListener(new OnLongClickListener() {
 			public boolean onLongClick(View v){
+				Intent browseact = new Intent(KoumaswapMenu.this,KoumaFileBrowser.class);
+				startActivityForResult(browseact,v.getId());
 				return true;
 			}
 		});
-
+	}
+	@Override
+	public void onActivityResult(int requestcode,int resultcode,Intent data){
+		if(resultcode==RESULT_OK){
+			EditText resultDest = (EditText) findViewById(requestcode);
+			resultDest.setText(data.getDataString());
+		}
 	}
 }

@@ -35,9 +35,10 @@ public final class R {
         public static final int textView1=0x7f050010;
     }
     public static final class layout {
-        public static final int koumamod=0x7f030000;
-        public static final int koumaswap=0x7f030001;
-        public static final int main=0x7f030002;
+        public static final int file_row=0x7f030000;
+        public static final int koumamod=0x7f030001;
+        public static final int koumaswap=0x7f030002;
+        public static final int main=0x7f030003;
     }
     public static final class string {
         public static final int CheckText=0x7f040002;
