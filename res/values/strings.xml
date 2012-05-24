@@ -2,18 +2,24 @@
 <resources>
     <string name="app_name">Koumamod</string>
     <string name="srvce_name">KoumaSwap</string>
-    <string name="CheckText">Disable Internal /data</string>
+    <string name="DisIntText">Disable Internal /data</string>
+    <string name="SwpSSMText">Swap SSM Partitions</string>
     <string name="modmode_header">Mounting Mode</string>
     <string name="swapmode_header">Swap Settings</string>
     <string name="modmode_default">None (Default)</string>
     <string name="modmode_data">Data</string>
     <string name="modmode_ssm">SSM</string>
     <string name="modtext_header">on koumamod\n</string>
-    <string name="modtext_internal">mount ext4 /dev/stl13 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n</string>
-	<string name="modtext_data">mount ext4 /dev/block/mmcblk0p2 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n</string>
-    <string name="modtext_coreblock1">mkdir /data/dalvik-cache 0771 system system \n chown system system /data/dalvik-cache \n chmod 0771 /data/dalvik-cache \n mkdir /data/app 0771 system system \n</string>
-	<string name="modtext_ssm">	mount ext4 /dev/block/mmcblk0p2 /data/app rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n mount ext4 /dev/block/mmcblk0p3 /data/dalvik-cache rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc \n</string>
-	<string name="modtext_coreblock2">	chown system system /data \n chmod 0771 /data \n trigger post-fs \n</string>
+    <string name="modtext_internal">mount ext4 /dev/stl13 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\n</string>
+	<string name="modtext_data">mount ext4 /dev/block/mmcblk0p2 /data rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\n</string>
+    <string name="modtext_coreblock1">mkdir /data/dalvik-cache 0771 system system\nchown system system /data/dalvik-cache\nchmod 0771 /data/dalvik-cache\nmkdir /data/app 0771 system system\n</string>
+	<string name="modtext_ssm">mount ext4 /dev/block/mmcblk0p2 /data/app rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\nmount ext4 /dev/block/mmcblk0p3 /data/dalvik-cache rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\n</string>
+	<string name="modtext_ssm_start">mount ext4</string>
+	<string name="modtext_ssm_device1">/dev/block/mmcblk0p2</string>
+	<string name="modtext_ssm_device2">/dev/block/mmcblk0p3</string>
+	<string name="modtext_ssm_app">/data/app rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\n</string>
+	<string name="modtext_ssm_dalvik">/data/dalvik-cache rw noatime nosuid nodev barrier=0 data=writeback nobh nodiratime noauto_da_alloc\n</string>
+	<string name="modtext_coreblock2">chown system system /data\nchmod 0771 /data\ntrigger post-fs\n</string>
 	<string name="swappiness_text">Swappiness</string>
 	<string name="savebutton_text">Save Settings</string>
 	<string name="swappathheader">Swap Path</string>

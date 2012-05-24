@@ -1,6 +1,7 @@
 package com.koumamod.prevail;
 
 import java.io.*;
+import java.util.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,9 +16,10 @@ import android.content.SharedPreferences;
 import com.stericson.RootTools.RootTools;
 
 public class KoumamodMenu extends Activity {
-	  private RadioGroup radioModGroup;
-	  private CheckBox checkDataMode;
-	  private Button SaveBut;
+	  public RadioGroup selectedMode;
+	  public CheckBox checkDataMode;
+	  public CheckBox swapSSMMode;
+	  public Button SaveBut;
     /** Called when the activity is first created. */
 	  Process p;
 	  public static final String PREFS_NAME = "KoumaModSettings";
@@ -26,29 +28,84 @@ public class KoumamodMenu extends Activity {
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.koumamod);
-		radioModGroup = (RadioGroup) findViewById(R.id.radioGroup1);
-		checkDataMode = (CheckBox) findViewById(R.id.checkBox1);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME,0);
-        checkDataMode.setClickable(settings.getBoolean("InternEna", false));
-		checkDataMode.setVisibility(checkDataMode.isClickable()? android.view.View.VISIBLE : android.view.View.GONE);
+		selectedMode = (RadioGroup) findViewById(R.id.Settings);
+		checkDataMode = (CheckBox) findViewById(R.id.optDisInt);
+		swapSSMMode = (CheckBox) findViewById(R.id.optSwpSSM);
+        File readsettings = new File("/system/koumamod");
+		char[] charsread = new char[2];
+        try {
+			FileReader reader = new FileReader(readsettings);
+			reader.read(charsread);
+			reader.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        if(charsread[0]==35){
+        	switch (charsread[1]&3) {
+    		case 2: selectedMode.check(R.id.optData); //data mode
+    			checkDataMode.setClickable(true);
+    			checkDataMode.setVisibility(View.VISIBLE);
+    			swapSSMMode.setClickable(false);
+    			swapSSMMode.setVisibility(View.GONE);
+    			checkDataMode.setChecked((charsread[1]&4)==4);
+    			swapSSMMode.setChecked(false);
+    			break;
+        	case 1:  selectedMode.check(R.id.optSSM); //ssm mode
+        		checkDataMode.setClickable(false);
+				checkDataMode.setVisibility(View.GONE);
+				swapSSMMode.setClickable(true);
+				swapSSMMode.setVisibility(View.VISIBLE);
+				swapSSMMode.setChecked((charsread[1]&8)==8);
+				checkDataMode.setChecked(false);
+				break;
+        	case 0:  selectedMode.check(R.id.optNone); //none
+        		checkDataMode.setClickable(false);
+        		checkDataMode.setVisibility(View.GONE);
+        		swapSSMMode.setClickable(false);
+        		swapSSMMode.setVisibility(View.GONE);
+    			swapSSMMode.setChecked(false);
+				checkDataMode.setChecked(false);
+        		break;
+        	}
+        }else{ //older version of koumamod file, read from sharedprefs xml
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,7);
+        checkDataMode.setClickable(settings.getInt("ModMode",R.id.optNone)==R.id.optData);
+		checkDataMode.setVisibility(checkDataMode.isClickable()? View.VISIBLE : View.GONE);
         checkDataMode.setChecked(settings.getBoolean("MountIntern", false));
-        radioModGroup.check(settings.getInt("ModMode", android.os.Build.ID.contains("Chicken Tits") ? R.id.radio2 :R.id.radio0 ));
+		swapSSMMode.setClickable(settings.getInt("ModMode",R.id.optNone)==R.id.optSSM);
+		swapSSMMode.setVisibility(swapSSMMode.isClickable()? View.VISIBLE : View.GONE);
+		swapSSMMode.setChecked(false); //older version didn't have this option, default to false
+        selectedMode.check(settings.getInt("ModMode", android.os.Build.ID.contains("Chicken Tits") ? R.id.optSSM :R.id.optNone ));
+        }
         myDataMode();
-    }
-    public void savesettings(CheckBox c, int selId) {
-    	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	}
+    public void savesettings() {
+    	SharedPreferences settings = getSharedPreferences(PREFS_NAME,7);
+    	Map<String,?> prefsMap = settings.getAll();
     	SharedPreferences.Editor editor = settings.edit();
-    	editor.putBoolean("MountIntern", c.isChecked());
-    	editor.putBoolean("InternEna", c.isClickable());
+    	for(Map.Entry<String,?> entry : prefsMap.entrySet()){
+    		if(String.class.getName().equals(entry.getValue().getClass().getName())) {
+    			editor.putString(entry.getKey(), (String) entry.getValue());
+    		}else if(Integer.class.getName().equals(entry.getValue().getClass().getName())){
+    			editor.putInt(entry.getKey(), (Integer) entry.getValue());
+    		}else if(Boolean.class.getName().equals(entry.getValue().getClass().getName())){
+    			editor.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+    		}
+    	}
+    	editor.putBoolean("MountIntern", checkDataMode.isChecked());
+    	int selId=selectedMode.getCheckedRadioButtonId();
     	editor.putInt("ModMode", selId);
-        KoumaModFileData = (
-        		getString(R.string.modtext_header) + "\n" + ((c.isChecked())? "" : getString(R.string.modtext_internal)) + 
-        		((selId==R.id.radio1) ? getString(R.string.modtext_data) : "") +
+    	char SettingsEncoded = (char) ((selId==R.id.optSSM?1:0)|(selId==R.id.optData?2:0)|(checkDataMode.isChecked()?4:0)|(swapSSMMode.isChecked()?8:0));
+    	String ssmText = getString(R.string.modtext_ssm_start)+" "+getString(swapSSMMode.isChecked()?R.string.modtext_ssm_device2:R.string.modtext_ssm_device1)+" "+getString(R.string.modtext_ssm_app)
+    				+getString(R.string.modtext_ssm_start)+" "+getString(swapSSMMode.isChecked()?R.string.modtext_ssm_device1:R.string.modtext_ssm_device2)+" "+getString(R.string.modtext_ssm_dalvik);
+        KoumaModFileData = ("#"+ SettingsEncoded +"\n"+
+        		getString(R.string.modtext_header) + "\n" + ((checkDataMode.isChecked())? "" : getString(R.string.modtext_internal)) + 
+        		((selectedMode.getCheckedRadioButtonId()==R.id.optData) ? getString(R.string.modtext_data) : "") +
         		getString(R.string.modtext_coreblock1) +
-        		((selId==R.id.radio2) ? getString(R.string.modtext_ssm) : "") +
+        		((selectedMode.getCheckedRadioButtonId()==R.id.optSSM) ? ssmText : "") +
         		getString(R.string.modtext_coreblock2)
         		);
-        editor.putString("KoumaModText", KoumaModFileData);
     	editor.commit();
         RootTools.remount("/system/", "rw");
         try {
@@ -64,21 +121,33 @@ public class KoumamodMenu extends Activity {
         Toast.makeText(KoumamodMenu.this, "Settings saved.\nReboot for changes to take effect.", Toast.LENGTH_LONG).show();
     }
     public void myDataMode(){
-		radioModGroup = (RadioGroup) findViewById(R.id.radioGroup1);
-		radioModGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+		selectedMode = (RadioGroup) findViewById(R.id.Settings);
+		selectedMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup myGroup, int mycheckid) {
-				int selectedId = radioModGroup.getCheckedRadioButtonId();
-				checkDataMode = (CheckBox) findViewById(R.id.checkBox1);
+				int selectedId = selectedMode.getCheckedRadioButtonId();
+				checkDataMode = (CheckBox) findViewById(R.id.optDisInt);
 				switch (selectedId) {
-				case R.id.radio1:
+				case R.id.optData:
 					checkDataMode.setClickable(true);
-					checkDataMode.setVisibility(android.view.View.VISIBLE);
+					checkDataMode.setVisibility(View.VISIBLE);
+					swapSSMMode.setClickable(false);
+					swapSSMMode.setChecked(false);
+					swapSSMMode.setVisibility(View.GONE);
 					break;
-				case R.id.radio0:
-				case R.id.radio2:
+				case R.id.optNone:
 					checkDataMode.setClickable(false);
 					checkDataMode.setChecked(false);
-					checkDataMode.setVisibility(android.view.View.GONE);
+					checkDataMode.setVisibility(View.GONE);
+					swapSSMMode.setClickable(false);
+					swapSSMMode.setChecked(false);
+					swapSSMMode.setVisibility(View.GONE);
+					break;
+				case R.id.optSSM:
+					swapSSMMode.setClickable(true);
+					swapSSMMode.setVisibility(View.VISIBLE);
+					checkDataMode.setClickable(false);
+					checkDataMode.setChecked(false);
+					checkDataMode.setVisibility(View.GONE);
 					break;
 				}
 			}
@@ -86,10 +155,9 @@ public class KoumamodMenu extends Activity {
 		SaveBut = (Button) findViewById(R.id.SaveButton);
 		SaveBut.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				radioModGroup = (RadioGroup) findViewById(R.id.radioGroup1);
-				int selectedId = radioModGroup.getCheckedRadioButtonId();
-				checkDataMode = (CheckBox) findViewById(R.id.checkBox1);
-				savesettings(checkDataMode, selectedId);				
+				selectedMode = (RadioGroup) findViewById(R.id.Settings);
+				checkDataMode = (CheckBox) findViewById(R.id.optDisInt);
+				savesettings();				
 			}
 		});
     }

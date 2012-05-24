@@ -1,6 +1,6 @@
 package com.koumamod.prevail;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,6 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TableLayout;
 import android.widget.LinearLayout;
-
-import com.stericson.RootTools.Mount;
-import com.stericson.RootTools.RootTools;
 
 public class KoumaswapMenu extends Activity {
 	public SeekBar swappinessbar;
@@ -41,25 +38,22 @@ public class KoumaswapMenu extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.koumaswap);
 		pathtable = (TableLayout) findViewById(R.id.tableLayout1);
-		settings = getSharedPreferences(PREFS_NAME, 0);
+		settings = getSharedPreferences(PREFS_NAME,7);
 		pathtext = (EditText) findViewById(R.id.pathText1);
 		prioritytest = (EditText) findViewById(R.id.priorityText1);
 		LoadPaths();
 		swappinessbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 		
-			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 						swappinessInd.setText(Integer.toString(seekBar.getProgress()));
 			}
 		
-			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
 				
 			}
 		
-			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
 				
@@ -71,6 +65,16 @@ public class KoumaswapMenu extends Activity {
 			public void onClick(View v){
 				boolean addflag = false;
 			   	editor = settings.edit();
+		    	Map<String,?> prefsMap = settings.getAll();
+		    	for(Map.Entry<String,?> entry : prefsMap.entrySet()){
+		    		if(String.class.getName().equals(entry.getValue().getClass().getName())) {
+		    			editor.putString(entry.getKey(), (String) entry.getValue());
+		    		}else if(Integer.class.getName().equals(entry.getValue().getClass().getName())){
+		    			editor.putInt(entry.getKey(), (Integer) entry.getValue());
+		    		}else if(Boolean.class.getName().equals(entry.getValue().getClass().getName())){
+		    			editor.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+		    		}
+		    	}
 			   	editor.putString("Swappiness", Integer.toString(swappinessbar.getProgress()));
 			   	paths = "";
 			   	for(int i=1;i<pathtable.getChildCount();i++){
@@ -86,7 +90,7 @@ public class KoumaswapMenu extends Activity {
 				   	paths = paths == "" ? paths : addflag ? paths + "\t" : paths;
 			   	};
 			   	editor.putString("swaplist", paths);
-			   	editor.putString("dependancies", calculateDeps(pathItems));
+//			   	editor.putString("dependancies", calculateDeps(pathItems));
 			   	editor.commit();
 		        Intent serviceIntent = new Intent(KoumaswapMenu.this, KoumaSwap.class);//"com.koumamod.prevail.KoumaSwap");
 				startService(serviceIntent);
@@ -103,7 +107,7 @@ public class KoumaswapMenu extends Activity {
 		swappinessInd =(TextView) findViewById(R.id.seekPosHumanReadable);
 		swappinessInd.setText(settings.getString("Swappiness","60"));
 		swappinessbar.setProgress(Integer.parseInt(settings.getString("Swappiness","60")));
-		String loadpaths = settings.getString("swaplist", "/dev/stl13,100\t");
+		String loadpaths = settings.getString("swaplist", "");///dev/stl13,100\t");
 		PathGroups = loadpaths.split("\t");
 		pathItems=new String[PathGroups.length][];
 		for(int i=0;i<PathGroups.length;i++){
@@ -147,27 +151,6 @@ public class KoumaswapMenu extends Activity {
 		pathtext=tv1;
 		addTextChanger(pathtext);
 		prioritytest=tv2;
-	}
-	private String calculateDeps(String[][] Items){
-		String Deps = "";
-		for(int i = 0;i<Items.length;i++){
-			ArrayList<Mount> curMounts = new ArrayList<Mount>();
-			try{
-				curMounts = RootTools.getMounts();
-			}catch (Exception e){
-			}
-			if (!curMounts.isEmpty()){
-				String M = "";
-				for (int x=0;x<curMounts.size();x++){
-					M = Items[i][1].contains(curMounts.get(x).getMountPoint().getAbsolutePath()) ?
-							M.length()<curMounts.get(x).getMountPoint().getAbsolutePath().length() ?
-									curMounts.get(x).getMountPoint().getAbsolutePath() : M : M;					
-				}
-				M = M.isEmpty() ? "<none>" : M;
-				Deps = Deps.isEmpty() ? M : Deps + "," + M;
-			}
-		}
-		return Deps;
 	}
 	private void addTextChanger(EditText h){
 		h.setLongClickable(true);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.koumamod.prevail"
-    android:versionCode="2"
-    android:versionName="1.2" >
+    android:versionCode="5"
+    android:versionName="1.5" >
 
     <uses-sdk android:minSdkVersion="10" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -32,7 +32,8 @@
 		<activity android:name=".KoumamodMenu" />	
 		<activity android:name=".KoumaswapMenu" />
 		<activity android:name=".KoumaFileBrowser" />
-		<activity android:name=".KoumaSwapCreate" />
+		<service android:name=".KoumaSwapCreate"
+		    android:process=":remote" />
 	</application>
     
 </manifest>

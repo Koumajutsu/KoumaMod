@@ -5,31 +5,31 @@
     android:orientation="vertical" >
 
     <CheckedTextView
-        android:id="@+id/checkedTextView1"
+        android:id="@+id/ModModeDisplayHeader"
         android:layout_width="wrap_content"
         android:layout_height="65dp"
         android:text="@string/modmode_header" />
 
     <RadioGroup
-        android:id="@+id/radioGroup1"
+        android:id="@+id/Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <RadioButton
-            android:id="@+id/radio0"
+            android:id="@+id/optNone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/modmode_default" />
 
         <RadioButton
-            android:id="@+id/radio1"
+            android:id="@+id/optData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/modmode_data" />
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/optSSM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/modmode_ssm" />
@@ -37,10 +37,16 @@
     </RadioGroup>
 
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/optDisInt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/CheckText" />
+        android:text="@string/DisIntText" />
+
+    <CheckBox
+        android:id="@+id/optSwpSSM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SwpSSMText" />
 
     <Button
         android:id="@+id/SaveButton"

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+import com.stericson.RootTools.RootTools;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -12,11 +14,11 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
+//import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
  
 public class KoumaFileBrowser extends ListActivity {
 
@@ -25,7 +27,7 @@ public class KoumaFileBrowser extends ListActivity {
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = new File("/");
-
+	
 	@Override
 	public void onBackPressed(){
 		upOneLevel();
@@ -61,12 +63,30 @@ public class KoumaFileBrowser extends ListActivity {
 
 	private void browseTo(final File aDirectory){
 		if (aDirectory.isDirectory()){
-			if(aDirectory.canRead()){
 				this.currentDirectory = aDirectory;
-				fill(aDirectory.listFiles());
-			} else {
-				Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
-			}
+				List<String> recls = new ArrayList<String>();
+				List<String> ls = new ArrayList<String>();				
+				ls.clear();
+				try {
+//					Log.i("ls",aDirectory.getCanonicalPath());
+					RootTools.useRoot=true;
+ 					recls =  RootTools.sendShell("ls "+aDirectory.getCanonicalPath(), -1);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for(int i=0;i<recls.size();i++){
+					File filetest =new File(recls.get(i));
+//					Log.i("recls",recls.get(i));
+					if(!(recls.get(i).isEmpty())&(recls.get(i)!=recls.get(recls.size()-1))){
+						ls.add(filetest.getAbsolutePath());
+					}
+				}
+				File[] testlist = new File[ls.size()];
+				for(int i=0;i<ls.size();i++) {
+				testlist[i] = new File(aDirectory.getAbsolutePath()+"/"+ls.get(i));
+				}
+				fill(testlist);
 		}else{
 			OnClickListener okButtonListener = new OnClickListener(){
 				// @Override
@@ -153,9 +173,11 @@ public class KoumaFileBrowser extends ListActivity {
 								if(!newSwap.exists()) break;
 							}
 							Intent makefile = new Intent(KoumaFileBrowser.this, KoumaSwapCreate.class);
-							makefile.putExtra("filename", newSwap);
-							makefile.putExtra("filesize",value);
-							startActivity(makefile);
+							Bundle bundle = new Bundle();
+							bundle.putString("filename", newSwap.getAbsolutePath());
+							bundle.putString("filesize",value);
+							makefile.putExtras(bundle);
+							startService(makefile);
 							Intent output = new Intent();
 		                	output.setData(Uri.parse(newSwap.getAbsolutePath()));
 		                	KoumaFileBrowser.this.setResult(RESULT_OK,output);
@@ -180,7 +202,7 @@ public class KoumaFileBrowser extends ListActivity {
 			};
 			AlertDialog swapcreate = new AlertDialog.Builder(this).create();
 			swapcreate.setTitle("Question");
-			swapcreate.setMessage("Create Swapfile here?");
+			swapcreate.setMessage("Create Swapfile here?\n" + KoumaFileBrowser.this.currentDirectory.getAbsolutePath());
 			swapcreate.setButton("OK",okButtonListener);
 			swapcreate.setButton2("Cancel", cancelButtonListener);
 			swapcreate.show();

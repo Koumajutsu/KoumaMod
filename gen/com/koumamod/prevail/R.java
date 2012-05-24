@@ -14,25 +14,27 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int SaveButton=0x7f050006;
-        public static final int Textview1=0x7f05000a;
-        public static final int Textview2=0x7f05000b;
-        public static final int checkBox1=0x7f050005;
-        public static final int checkedTextView1=0x7f050000;
-        public static final int linearLayout1=0x7f050009;
-        public static final int linearLayout2=0x7f05000d;
-        public static final int pathText1=0x7f05000e;
-        public static final int priorityText1=0x7f05000f;
-        public static final int radio0=0x7f050002;
-        public static final int radio1=0x7f050003;
-        public static final int radio2=0x7f050004;
-        public static final int radioGroup1=0x7f050001;
-        public static final int seekBar1=0x7f050012;
-        public static final int seekPosHumanReadable=0x7f050011;
-        public static final int tableLayout1=0x7f050007;
-        public static final int tableRow1=0x7f050008;
-        public static final int tableRow2=0x7f05000c;
-        public static final int textView1=0x7f050010;
+        public static final int ModModeDisplayHeader=0x7f050000;
+        public static final int SaveButton=0x7f050007;
+        public static final int Settings=0x7f050001;
+        public static final int Textview1=0x7f05000c;
+        public static final int Textview2=0x7f05000d;
+        public static final int checkedTextView1=0x7f050008;
+        public static final int linearLayout1=0x7f05000b;
+        public static final int linearLayout2=0x7f05000f;
+        public static final int optData=0x7f050003;
+        public static final int optDisInt=0x7f050005;
+        public static final int optNone=0x7f050002;
+        public static final int optSSM=0x7f050004;
+        public static final int optSwpSSM=0x7f050006;
+        public static final int pathText1=0x7f050010;
+        public static final int priorityText1=0x7f050011;
+        public static final int seekBar1=0x7f050014;
+        public static final int seekPosHumanReadable=0x7f050013;
+        public static final int tableLayout1=0x7f050009;
+        public static final int tableRow1=0x7f05000a;
+        public static final int tableRow2=0x7f05000e;
+        public static final int textView1=0x7f050012;
     }
     public static final class layout {
         public static final int file_row=0x7f030000;
@@ -41,24 +43,30 @@ public final class R {
         public static final int main=0x7f030003;
     }
     public static final class string {
-        public static final int CheckText=0x7f040002;
+        public static final int DisIntText=0x7f040002;
+        public static final int SwpSSMText=0x7f040003;
         public static final int app_name=0x7f040000;
-        public static final int modmode_data=0x7f040006;
-        public static final int modmode_default=0x7f040005;
-        public static final int modmode_header=0x7f040003;
-        public static final int modmode_ssm=0x7f040007;
-        public static final int modtext_coreblock1=0x7f04000b;
-        public static final int modtext_coreblock2=0x7f04000d;
-        public static final int modtext_data=0x7f04000a;
-        public static final int modtext_header=0x7f040008;
-        public static final int modtext_internal=0x7f040009;
-        public static final int modtext_ssm=0x7f04000c;
-        public static final int pathhint=0x7f040012;
-        public static final int priorityheader=0x7f040011;
-        public static final int savebutton_text=0x7f04000f;
+        public static final int modmode_data=0x7f040007;
+        public static final int modmode_default=0x7f040006;
+        public static final int modmode_header=0x7f040004;
+        public static final int modmode_ssm=0x7f040008;
+        public static final int modtext_coreblock1=0x7f04000c;
+        public static final int modtext_coreblock2=0x7f040013;
+        public static final int modtext_data=0x7f04000b;
+        public static final int modtext_header=0x7f040009;
+        public static final int modtext_internal=0x7f04000a;
+        public static final int modtext_ssm=0x7f04000d;
+        public static final int modtext_ssm_app=0x7f040011;
+        public static final int modtext_ssm_dalvik=0x7f040012;
+        public static final int modtext_ssm_device1=0x7f04000f;
+        public static final int modtext_ssm_device2=0x7f040010;
+        public static final int modtext_ssm_start=0x7f04000e;
+        public static final int pathhint=0x7f040018;
+        public static final int priorityheader=0x7f040017;
+        public static final int savebutton_text=0x7f040015;
         public static final int srvce_name=0x7f040001;
-        public static final int swapmode_header=0x7f040004;
-        public static final int swappathheader=0x7f040010;
-        public static final int swappiness_text=0x7f04000e;
+        public static final int swapmode_header=0x7f040005;
+        public static final int swappathheader=0x7f040016;
+        public static final int swappiness_text=0x7f040014;
     }
 }
